@@ -3,15 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcade Hub</title>
+<title>⚡ Lightning Arcade</title>
 
 <style>
 
+/* BACKGROUND */
+
 body{
 margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#0b0b0f;
+font-family: 'Segoe UI', sans-serif;
 color:white;
+background: radial-gradient(circle at top, #0f0f1f, #050508);
+overflow-x:hidden;
+}
+
+/* subtle animated glow */
+
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background: radial-gradient(circle, rgba(0,229,255,0.08), transparent 60%);
+animation: pulse 6s infinite linear;
+z-index:-1;
+}
+
+@keyframes pulse{
+0%{transform:translate(-25%,-25%)}
+50%{transform:translate(-30%,-30%)}
+100%{transform:translate(-25%,-25%)}
 }
 
 /* TOP BAR */
@@ -20,62 +41,84 @@ color:white;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 25px;
-background:#111;
-border-bottom:2px solid #00e5ff;
+padding:18px 30px;
+background:rgba(15,15,25,0.8);
+backdrop-filter:blur(10px);
+border-bottom:2px solid rgba(0,229,255,0.5);
 }
 
 .logo{
-font-size:26px;
-font-weight:bold;
-color:#00e5ff;
-text-shadow:0 0 10px #00e5ff;
+font-size:28px;
+font-weight:800;
+background: linear-gradient(90deg,#00e5ff,#7a5cff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+text-shadow:0 0 20px rgba(0,229,255,0.7);
 }
 
+/* NAV */
+
 .nav button{
-background:none;
-border:none;
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(0,229,255,0.2);
 color:white;
-font-size:16px;
-margin-left:20px;
+font-size:15px;
+margin-left:15px;
 cursor:pointer;
-padding:6px 12px;
-border-radius:6px;
-transition:0.2s;
+padding:8px 14px;
+border-radius:10px;
+transition:0.25s;
 }
 
 .nav button:hover{
 background:#00e5ff;
 color:black;
+box-shadow:0 0 12px #00e5ff;
 }
 
 /* PAGE */
 
 .container{
-padding:25px;
+padding:30px;
 }
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:20px;
+gap:22px;
 }
 
-/* GAME CARD */
+/* CARD */
 
 .card{
-background:#121218;
-border-radius:14px;
+background:rgba(20,20,30,0.6);
+border-radius:16px;
 overflow:hidden;
 cursor:pointer;
-transition:0.25s;
-border:2px solid transparent;
+transition:0.3s;
+border:1px solid rgba(255,255,255,0.05);
+backdrop-filter:blur(6px);
+position:relative;
+}
+
+.card::after{
+content:"";
+position:absolute;
+inset:0;
+border-radius:16px;
+background:linear-gradient(120deg,transparent,#00e5ff55,transparent);
+opacity:0;
+transition:0.3s;
 }
 
 .card:hover{
-transform:scale(1.05);
-border:2px solid #00e5ff;
-box-shadow:0 0 15px #00e5ff;
+transform:translateY(-6px) scale(1.04);
+box-shadow:0 0 25px rgba(0,229,255,0.4);
+border:1px solid rgba(0,229,255,0.4);
+}
+
+.card:hover::after{
+opacity:1;
 }
 
 .card img{
@@ -86,11 +129,12 @@ object-fit:cover;
 
 .card p{
 text-align:center;
-padding:10px;
+padding:12px;
 font-weight:bold;
+letter-spacing:0.5px;
 }
 
-/* GAME PLAYER */
+/* PLAYER */
 
 .player{
 position:fixed;
@@ -98,7 +142,7 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:black;
+background:rgba(0,0,0,0.95);
 display:none;
 flex-direction:column;
 z-index:100;
@@ -110,16 +154,25 @@ border:none;
 }
 
 .playerbar{
-background:#111;
-padding:10px;
+background:rgba(10,10,20,0.9);
+padding:12px;
+border-bottom:1px solid rgba(0,229,255,0.3);
 }
 
 .playerbar button{
-background:#00e5ff;
+background:linear-gradient(90deg,#00e5ff,#7a5cff);
 border:none;
-padding:8px 15px;
-border-radius:6px;
+padding:8px 16px;
+border-radius:8px;
 cursor:pointer;
+color:black;
+font-weight:bold;
+box-shadow:0 0 10px #00e5ff;
+transition:0.2s;
+}
+
+.playerbar button:hover{
+transform:scale(1.05);
 }
 
 </style>
@@ -128,7 +181,7 @@ cursor:pointer;
 <body>
 
 <div class="topbar">
-<div class="logo">🕹 Arcade Hub</div>
+<div class="logo">⚡ Lightning Arcade</div>
 
 <div class="nav">
 <button onclick="showSection('games')">Games</button>
