@@ -1,0 +1,37 @@
+<body style="margin:0;">
+
+<style>
+/* ===== CROP SETTINGS (EDIT THESE) ===== */
+:root{
+  --left: -50px;   /* move page left/right */
+  --top: 0px;      /* move page up/down */
+  --zoom: 1;       /* zoom level */
+}
+/* ====================================== */
+
+.embed-container{
+  width:100%;
+  min-height:100vh;
+  position:relative;
+}
+
+.embed-frame{
+  position:absolute;
+  top:var(--top);
+  left:var(--left);
+  width:120vw;
+  height:200vh; /* makes room to scroll */
+  border:none;
+  transform:scale(var(--zoom));
+  transform-origin:top left;
+}
+</style>
+
+<div class="embed-container">
+  <iframe
+    class="embed-frame"
+    src="https://gointospace.app/&?q=GitHub">
+  </iframe>
+</div>
+
+</body>
