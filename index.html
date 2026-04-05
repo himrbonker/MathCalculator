@@ -186,6 +186,7 @@ transform:scale(1.05);
 <div class="nav">
 <button onclick="showSection('games')">Games</button>
 <button onclick="showSection('apps')">Apps</button>
+<button onclick="showSection('websites')">Apps</button>
 </div>
 </div>
 
@@ -259,7 +260,7 @@ transform:scale(1.05);
 <p>TikTok</p>
 </div>
 
-<div class="card" onclick="playGame('discord.html')">
+<div class="card" onclick="playGame('https://frogiesarcade.net/frog/ixl/hvtrs8%2F-dksaopd%2Ccmm-lmgkn')">
 <img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg">
 <p>Discord</p>
 </div>
@@ -299,6 +300,20 @@ transform:scale(1.05);
 </div>
 </div>
 
+
+<!-- WEBSITES -->
+<div id="webSection" style="display:none">
+<div class="grid">
+
+<div class="card" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Farcz%257Bgcmgs%252Ccmm-')">
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Crazygames_jpg_logo.jpg">
+<p>Crazy Games</p>
+</div>
+
+
+</div>
+</div>
+
 </div>
 
 <!-- PLAYER -->
@@ -329,12 +344,18 @@ function showSection(section){
 
 document.getElementById("gamesSection").style.display="none"
 document.getElementById("appsSection").style.display="none"
+document.getElementById("webSection").style.display="none"
+
 
 if(section==="games"){
 document.getElementById("gamesSection").style.display="block"
 }
 
 if(section==="apps"){
+document.getElementById("appsSection").style.display="block"
+}
+
+if(section==="webs"){
 document.getElementById("appsSection").style.display="block"
 }
 
