@@ -381,7 +381,7 @@ body::after {
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <a class="logo-small" onclick="goHome()">&#9889; Arc&#64;de</a>
+  <a class="logo-small" onclick="goHome()">Lightning Arc&#64;de</a>
   <div class="nav">
     <button onclick="showPage('games')">Games</button>
     <button onclick="showPage('apps')">Apps</button>
@@ -393,7 +393,7 @@ body::after {
 <!-- HOME PAGE -->
 <div id="homePage" class="page active">
   <div class="hero">
-    <div class="hero-title"Lightning<br>Arc<span class="at">&#64;</span>de</div>
+    <div class="hero-title">Lightning<br>Arc<span class="at">&#64;</span>de</div>
     <div class="hero-sub">Insert coin to continue</div>
   </div>
   <div class="home-label">Featured Games</div>
@@ -521,12 +521,45 @@ function goHome() {
   document.getElementById('homePage').classList.add('active');
 }
 function playGame(url) {
+  const loader = document.getElementById('loader');
+  const loaderText = document.getElementById('loaderText');
+  const frame = document.getElementById('gameFrame');
+
+  // Reset loader state
+  loader.classList.remove('hidden');
+  loaderText.textContent = 'Loading Game';
+
+  // Restart loading bar animation
+  const bar = loader.querySelector('.loader-bar');
+  bar.style.animation = 'none';
+  bar.offsetHeight; // force reflow
+  bar.style.animation = '';
+
+  // Open player
   document.getElementById('player').classList.add('open');
-  document.getElementById('gameFrame').src = url;
+
+  // Set iframe
+  frame.src = url;
+
+  // When game loads → hide loader
+  frame.onload = () => {
+    setTimeout(() => {
+      loader.classList.add('hidden');
+    }, 400);
+  };
+
+  // Fallback (in case iframe never fires onload)
+  setTimeout(() => {
+    loader.classList.add('hidden');
+  }, 5000);
 }
+
 function closeGame() {
   document.getElementById('player').classList.remove('open');
   document.getElementById('gameFrame').src = '';
+
+  // Hide loader just in case
+  document.getElementById('loader').classList.add('hidden');
 }
 function openBgPanel() { document.getElementById('bgPanel').classList.add('open'); }
 function closeBgPanel() { document.getElementById('bgPanel').classList.remove('open'); }
