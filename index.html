@@ -580,12 +580,44 @@ function goHome() {
   document.getElementById('homePage').classList.add('active');
 }
 function playGame(url) {
+  const loader = document.getElementById('loader');
+  const loaderText = document.getElementById('loaderText');
+  const frame = document.getElementById('gameFrame');
+
+  // Reset loader state
+  loader.classList.remove('hidden');
+  loaderText.textContent = 'Loading Game';
+
+  // Restart loading bar animation
+  const bar = loader.querySelector('.loader-bar');
+  bar.style.animation = 'none';
+  bar.offsetHeight; // force reflow
+  bar.style.animation = '';
+
+  // Open player
   document.getElementById('player').classList.add('open');
-  document.getElementById('gameFrame').src = url;
+
+  // Set iframe
+  frame.src = url;
+
+  // When game loads → hide loader
+  frame.onload = () => {
+    setTimeout(() => {
+      loader.classList.add('hidden');
+    }, 400);
+  };
+
+  // Fallback (in case iframe never fires onload)
+  setTimeout(() => {
+    loader.classList.add('hidden');
+  }, 5000);
 }
 function closeGame() {
   document.getElementById('player').classList.remove('open');
   document.getElementById('gameFrame').src = '';
+
+  // Hide loader just in case
+  document.getElementById('loader').classList.add('hidden');
 }
 function applyPreset(btn, url, isVideo) {
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
