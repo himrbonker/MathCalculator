@@ -605,6 +605,28 @@ function clearBg() {
 document.getElementById('bgPanel').addEventListener('click', function(e) {
   if (e.target===this) closeBgPanel();
 });
+
+function getCloakIcon() {
+  const title = document.getElementById('cloakTitleInput').value;
+
+  if (title.includes('Google Classroom'))
+    return 'https://ssl.gstatic.com/classroom/favicon.png';
+
+  if (title.includes('Google Docs'))
+    return 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico';
+
+  if (title.includes('Khan Academy'))
+    return 'https://cdn.kastatic.org/images/favicon.ico';
+
+  if (title.includes('Schoology'))
+    return 'https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/favicon.ico';
+
+  if (title.includes('Canvas'))
+    return 'https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico';
+
+  return 'https://www.google.com/favicon.ico'; // default fallback
+}
+  
 </script>
 </body>
 </html>
