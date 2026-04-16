@@ -158,27 +158,91 @@ body::after {
 }
 .card:hover::before { transform: translateY(0); }
 
-.player {
+/* ── MODAL PLAYER ── */
+#modalOverlay {
+  display: none;
   position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.97); display: none; flex-direction: column;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
 }
-.player.open { display: flex; }
-.player iframe { flex: 1; border: none; width: 100%; }
-.playerbar {
-  background: rgba(5,5,5,0.95); padding: 10px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  display: flex; align-items: center; gap: 12px;
+#modalOverlay.open { display: flex; }
+
+#modalBox {
+  position: relative;
+  width: min(860px, 92vw);
+  height: min(580px, 80vh);
+  background: #0d0d0d;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalPop 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards;
 }
-.playerbar button {
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+#modalIframe {
+  flex: 1;
+  border: none;
+  width: 100%;
+  border-radius: 22px 22px 0 0;
+}
+
+.modal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(0,0,0,0.85);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-radius: 0 0 22px 22px;
+  flex-shrink: 0;
+}
+
+#modalTitle {
   font-family: 'Share Tech Mono', monospace;
-  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
-  color: var(--mid); padding: 7px 18px; border-radius: 8px; cursor: pointer; font-size: 13px;
-  filter: grayscale(100%); transition: filter 0.25s, transform 0.2s, color 0.25s, background 0.25s;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
-.playerbar button:hover {
-  filter: grayscale(0%); transform: scale(1.1);
-  color: #000; background: #00e5ff; border-color: #00e5ff;
+
+.modal-btns { display: flex; gap: 8px; }
+
+.modal-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: var(--mid);
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
 }
+.modal-btn:hover { background: rgba(255,255,255,0.14); color: #fff; transform: scale(1.06); }
+
+.modal-btn.fullscreen-btn {
+  background: rgba(0,229,255,0.1);
+  border-color: rgba(0,229,255,0.3);
+  color: #00e5ff;
+}
+.modal-btn.fullscreen-btn:hover { background: #00e5ff; color: #000; }
+
+.modal-btn.close-btn {
+  background: rgba(248,113,113,0.1);
+  border-color: rgba(248,113,113,0.3);
+  color: #f87171;
+}
+.modal-btn.close-btn:hover { background: #f87171; color: #000; }
 
 /* ── BG / SETTINGS PANEL ── */
 #bgPanel {
@@ -246,7 +310,6 @@ body::after {
 
 .bg-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 2px 0; }
 
-/* ── CLOAK SECTION ── */
 .cloak-section-title {
   font-size: 11px; letter-spacing: 5px; color: var(--mid); text-transform: uppercase;
 }
@@ -355,11 +418,11 @@ body::after {
   </div>
   <div class="home-label">Featured Games</div>
   <div class="home-grid">
-    <div class="card" data-name="TikTok" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fviitmk%252Ccmm-')"><img src="https://sf-static.tiktokcdn.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"></div>
-    <div class="card" data-name="Snapchat" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fqncpahct%252Ccmm-srovlkgjt')"><img src="https://play-lh.googleusercontent.com/KxeSAjPTKliCErbivNiXrd6cTwfbqUJcbSRPe_IBVK_YmwckfMRS1VIHz-5cgT09yMo=w240-h480-rw"></div>
-    <div class="card" data-name="YouTube" onclick="playGame('yt.html')"><img src="https://yt3.googleusercontent.com/3s6evpqAiDU9tQR4sC2siJippbH2RWVPnwHgyl4V0th2iuQz0VDQZbUhQBGmsxLYo-mjG6TqZQ=s900-c-k-c0x00ffffff-no-rj"></div>
-    <div class="card" data-name="Roblox" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F39%253B02%252F%2560.jtol')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Roblox_%282025%29_%28App_Icon%29.svg/250px-Roblox_%282025%29_%28App_Icon%29.svg.png"></div>
-    <div class="card" data-name="Discord" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Ffiqcmrf.aoo%252F')"><img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg"></div>
+    <div class="card" data-name="TikTok" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fviitmk%252Ccmm-','TikTok')"><img src="https://sf-static.tiktokcdn.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"></div>
+    <div class="card" data-name="Snapchat" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fqncpahct%252Ccmm-srovlkgjt','Snapchat')"><img src="https://play-lh.googleusercontent.com/KxeSAjPTKliCErbivNiXrd6cTwfbqUJcbSRPe_IBVK_YmwckfMRS1VIHz-5cgT09yMo=w240-h480-rw"></div>
+    <div class="card" data-name="YouTube" onclick="playGame('yt.html','YouTube')"><img src="https://yt3.googleusercontent.com/3s6evpqAiDU9tQR4sC2siJippbH2RWVPnwHgyl4V0th2iuQz0VDQZbUhQBGmsxLYo-mjG6TqZQ=s900-c-k-c0x00ffffff-no-rj"></div>
+    <div class="card" data-name="Roblox" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F39%253B02%252F%2560.jtol','Roblox')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Roblox_%282025%29_%28App_Icon%29.svg/250px-Roblox_%282025%29_%28App_Icon%29.svg.png"></div>
+    <div class="card" data-name="Discord" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Ffiqcmrf.aoo%252F','Discord')"><img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg"></div>
   </div>
 </div>
 
@@ -368,44 +431,44 @@ body::after {
   <div class="container">
     <div class="section-title">// All Games</div>
     <div class="grid">
-      <div class="card" data-name="Karlson" onclick="playGame('Karlson.html')"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1228610/capsule_616x353.jpg?t=1649362618"></div>
-      <div class="card" data-name="A Difficult Game About Climbing" onclick="playGame('A Difficult Game About Climbing.html')"><img src="https://www4.minijuegosgratis.com/v3/games/thumbnails/249029_7_sq.jpg"></div>
-      <div class="card" data-name="Hollow Knight" onclick="playGame('Hollow Knight.html')"><img src="https://upload.wikimedia.org/wikipedia/en/d/de/Hollow_Knight_2026_cover_art.jpg"></div>
-      <div class="card" data-name="Minecraft Classic" onclick="playGame('Minecraft 1.12.2.html')"><img src="https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/d/9/a/d9a1f186e29d35026b1a5822fe63950cf59c426d.jpeg"></div>
-      <div class="card" data-name="Gorilla Tag" onclick="playGame('Gorilla Tag.html')"><img src="https://image.api.playstation.com/vulcan/ap/rnd/202410/2514/4744c1ac34e78d50f9ecfbc9958ca6375a2011b1bcf9b9b6.png"></div>
-      <div class="card" data-name="Roblox" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F39%253B02%252F%2560.jtol')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Roblox_%282025%29_%28App_Icon%29.svg/250px-Roblox_%282025%29_%28App_Icon%29.svg.png"></div>
-      <div class="card" data-name="Stumble Guys" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F30213%252F%2560.jtol')"><img src="/StumbleGuys.png"></div>
-      <div class="card" data-name="Fortnite" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fcpvokdg%252F7854-artmife%252Chvmn%253Ffegp%255Dlkni%253Dcpvokdgsgapcj%253A-%252Faoo.gpkceaoeq.doptlive')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Fortnite_F_lettermark_logo.png"></div>
-      <div class="card" data-name="BTD 5" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-urlmafs%252Culgpownfef.lev%252Fpudfne%255Dwparpgr-rwfdlgeobgd%252Chvmn%253Ft%253D3.0.1%2526%2560rmwqepmmdg%253Dfedawlv%2526rrmpq%253D%277%2540%252502pudfne%2720%25251A%2720%25250Fpudfne%255Dwparpgr%272Dlkb%272Drwfdlg.hs%273D1574160%253A0%253A%252502%272A%252502ru%2560lkc%255Dpctj%252502%273C%252502%272Drwfdlg_urcprep%25250Fni%2560%25250F%2720%25250C%2720suf%2720%25251A%2720hvtrs%273C%25250F%272Durlmafs%252Culgpownfef.lev%25250F412020%272D630%253B97_%2560tf5%252Csuf%273D1524330%253B77%252502%272A%252502taps%2720%25251A%277%2540%252502LeugpownfsCPK_Ru%2560lksjepIF%252502%273C1%272A%252502LeugpownfsCPK_Qald%2560ozIF%252502%273C%25250249fd%253Bef645502%252502%272A%252502LeugpownfsCPK_QeqskolIF%252502%273C%252502%2720%25250C%2720NgwermuldqARI%255DUqepNcmg%252502%273C%252502%2724lv%25251Bfenevef%252506et%273%2540%252502%272A%252502LeugpownfsCPK_WsgrKD%2720%25251A2%25250C%2720ne_wsgrlaoe%2720%25251A%2720%252506nt%273%2540dglgtgd%2724gv%25251B%2720%25255D%272A%252502uiftj%252502%273C820%272A%252502jekgjt%2720%25251A422%25250C%2720iaol%252502%273C%252502jtvpq%25251A%272D%25250Friaol.lgdineq.aoo%25250F412020%272Dfnaqh%255D630%253B97_aapd%252Cwgbr%25251Fd1524330%253B7%253B%252502%272A%252502uapnMnWnqurpmrvefCmnvelt%2720%25251Adansg%25250C%2720eztgrlan%252502%273C%252502%272Drwfdlg_urcprep%25250Fgxvepncl%272Drwfdlg-gxvepncl%252Filpwt%252Cjq%25251F3755%253A336%253B9%2720%25255D')"><img src="https://play-lh.googleusercontent.com/LLEUf9Qcd6N2L4nynBArv7wHyvPLiKBJtXjFEfgD4yS80ZJtQREVjIJE_HXFRDAJxQ"></div>
-      <div class="card" data-name="C.O.D Mobile" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F3020%253A%252F%2560.jtol')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKiNEpM5ANsuollTpUI3cO5dlQfzJtjxj-pQ&s"></div>
-      <div class="card" data-name="Among Us" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fknlepsnovh%252Flnc-4245%252Fcmmne-ws%252Chvmn')"><img src="https://www.webwise.ie/wp-content/uploads/2020/12/IMG1207.jpg"></div>
-      <div class="card" data-name="Cookie Run" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F3021%253B%252F%2560.jtol')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVbAqgeV_uwe9KeMG2cQ849H8OTJ30UkNwAWtRHzJtsmJoat1rRfU6_Nk5NKvRRBCvj_fs&s=10"></div>
-      <div class="card" data-name="Geometry Dash" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fpo%2560tmp%252Fgcmgs-1602%252Feemmgtpy%252Fdcsj.jtol')"><img src="https://m.media-amazon.com/images/I/61mVIP6Oo1L.png"></div>
-      <div class="card" data-name="Melon Sandbox" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Frlcyfuak%257B%252F51%253B9-mglmn%252Fscnfbmx%252Chvmn')"><img src="https://play-lh.googleusercontent.com/9KgS1cF6vWMF9Fl25S36bKr8zDh0ddkTOeN7WpBcQAE-pKfahG2DjUxbQ8sespNoe3KW3qbcaVD8H6DfNys6"></div>
-      <div class="card" data-name="Terraria" onclick="playGame('Terraria.html')"><img src="https://m.media-amazon.com/images/I/31V6N3J7NVL.png"></div>
-      <div class="card" data-name="PubG Mobile" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Frrmxkmc-%2560eva-240%253B%252Fru%2560g%252Fmmbklg-peqiqtcnae%252Chvmn')"><img src="https://images.skine.com/brand/card/background/pubg.jpg"></div>
-      <div class="card" data-name="R.E.P.O" onclick="playGame('R.E.P.O.html')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/195.png"></div>
-      <div class="card" data-name="Slime Rancher" onclick="playGame('Slime Rancher.html')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUW65YDm3GJtJYsKc1zqhy_-A1DjpoO-ka6A&s"></div>
-      <div class="card" data-name="Silk Song" onclick="playGame('Hollow Knight_Silksong.html')"><img src="https://media.wired.com/photos/68b9b74debac84a11c241098/2:3/w_900,h_1350,c_limit/Silksong_Promo_03.jpg"></div>
-      <div class="card" data-name="Deltarune" onclick="playGame('https://ttgworld.net/games/files/Deltarune/index.html')"><img src="https://m.media-amazon.com/images/M/MV5BNzI4YTdiMWQtNzM4Zi00ODk4LWE2YTUtNTkwYjZjYzgyZjJlXkEyXkFqcGc@._V1_.jpg"></div>
-      <div class="card" data-name="Bowmasters" onclick="playGame('Bowmasters.html')"><img src="https://m.media-amazon.com/images/I/61MdHsjm1xL.png"></div>
-      <div class="card" data-name="Surviver.io" onclick="playGame('Surviver.io.html')"><img src="https://play-lh.googleusercontent.com/os7JIk6PtULMjal93noyeGqWKjxQ_35sXrT708XxHq_ORk_AIhqW3_iIm8-OjuRLyDDb_MVs5EZAwC4aXIbgtA"></div>
-      <div class="card" data-name="Friday Night Funkin" onclick="playGame('Friday Night Funkin.html')"><img src="https://fnf-games.io/data/image/game/fnf/fnf.webp"></div>
-      <div class="card" data-name="Block Blast" onclick="playGame('Block Blast.html')"><img src="https://play-lh.googleusercontent.com/R0qgNDYYHbRhw6JFsdEbDMqONplEvJx0m0W9wzYVvY3eNF1c2rfBWYjQxW0sLEzFe1E"></div>
-      <div class="card" data-name="Brotato" onclick="playGame('Brotato.html')"><img src="https://static0.thegamerimages.com/wordpress/wp-content/uploads/2023/06/16-brotato-best-builds.jpg"></div>
-      <div class="card" data-name="Bendy Ink Machine" onclick="playGame('Bendy and the Ink Machine.html')"><img src="https://play-lh.googleusercontent.com/96eBM7bUrouYRKa_1k3d2inqHMNJp25BX4IeGbpHdhvOYjLjqFn4upD2wEwGPsOBh2oz"></div>
-      <div class="card" data-name="Cuphead" onclick="playGame('Cuphead.html')"><img src="https://cdn.mos.cms.futurecdn.net/i6yoNS8R925bXaxk3F3vAX-1920-80.jpg"></div>
-      <div class="card" data-name="Brotato" onclick="playGame('Flying Gorilla 3D.html')"><img src="https://i.ytimg.com/vi/NfbQoOWsH4A/maxresdefault.jpg"></div>
-      <div class="card" data-name="Kindergarden" onclick="playGame('Kindergarden.html')"><img src="https://spacewavesgame.io/data/image/game/kindergarten.png"></div>
-      <div class="card" data-name="Raft" onclick="playGame('Raft.html')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/457.png"></div>
-      <div class="card" data-name="Slenderman" onclick="playGame('Slender_ The 8 Pages.html')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/451.png"></div>
-      <div class="card" data-name="Stardew Valley" onclick="playGame('Stardew Valley.html')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/789.png"></div>
-      <div class="card" data-name="Undertale Yellow" onclick="playGame('Undertale Yellow.html')"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Undertale_Yellow_splash_screen.png"></div>
-      <div class="card" data-name="People Playground" onclick="playGame('People Playground.html')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/194-m.png"></div>
-      <div class="card" data-name="Untitled Goose Game" onclick="playGame('Untitled Goose Game.html')"><img src="https://media.sketchfab.com/models/5d26d1d9c0d348df93318d186d019751/thumbnails/1c8f8f1f30f04f6eb6202df6f3bacddb/fd684f94327746779f687c9845c32b39.jpeg"></div>
-      <div class="card" data-name="That's Not My Neighbor" onclick="playGame('That's Not My Neighbor.html')"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3431040/d713591d7029c993a790bfb284f49ca6f1b43b46/capsule_616x353.jpg?t=1763509556"></div>
-      <div class="card" data-name="Amanda The Adventurer" onclick="playGame('Amanda The Adventurer.html')"><img src="https://i.ytimg.com/vi/eUcjiPI0TbE/maxresdefault.jpg"></div>
-      <div class="card" data-name="Getting Over It" onclick="playGame('Getting Over It with Bennett Foddy.html')"><img src="https://sm.ign.com/t/ign_ap/cover/g/getting-ov/getting-over-it-with-bennett-foddy_3bxh.600.jpg"></div>
+      <div class="card" data-name="Karlson" onclick="playGame('Karlson.html','Karlson')"><img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1228610/capsule_616x353.jpg?t=1649362618"></div>
+      <div class="card" data-name="A Difficult Game About Climbing" onclick="playGame('A Difficult Game About Climbing.html','A Difficult Game About Climbing')"><img src="https://www4.minijuegosgratis.com/v3/games/thumbnails/249029_7_sq.jpg"></div>
+      <div class="card" data-name="Hollow Knight" onclick="playGame('Hollow Knight.html','Hollow Knight')"><img src="https://upload.wikimedia.org/wikipedia/en/d/de/Hollow_Knight_2026_cover_art.jpg"></div>
+      <div class="card" data-name="Minecraft Classic" onclick="playGame('Minecraft 1.12.2.html','Minecraft Classic')"><img src="https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/4X/d/9/a/d9a1f186e29d35026b1a5822fe63950cf59c426d.jpeg"></div>
+      <div class="card" data-name="Gorilla Tag" onclick="playGame('Gorilla Tag.html','Gorilla Tag')"><img src="https://image.api.playstation.com/vulcan/ap/rnd/202410/2514/4744c1ac34e78d50f9ecfbc9958ca6375a2011b1bcf9b9b6.png"></div>
+      <div class="card" data-name="Roblox" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F39%253B02%252F%2560.jtol','Roblox')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Roblox_%282025%29_%28App_Icon%29.svg/250px-Roblox_%282025%29_%28App_Icon%29.svg.png"></div>
+      <div class="card" data-name="Stumble Guys" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F30213%252F%2560.jtol','Stumble Guys')"><img src="/StumbleGuys.png"></div>
+      <div class="card" data-name="Fortnite" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fcpvokdg%252F7854-artmife%252Chvmn%253Ffegp%255Dlkni%253Dcpvokdgsgapcj%253A-%252Faoo.gpkceaoeq.doptlive','Fortnite')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Fortnite_F_lettermark_logo.png"></div>
+      <div class="card" data-name="BTD 5" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-urlmafs%252Culgpownfef.lev%252Fpudfne%255Dwparpgr-rwfdlgeobgd%252Chvmn%253Ft%253D3.0.1%2526%2560rmwqepmmdg%253Dfedawlv%2526rrmpq%253D%277%2540%252502pudfne%2720%25251A%2720%25250Fpudfne%255Dwparpgr%272Dlkb%272Drwfdlg.hs%273D1574160%253A0%253A%252502%272A%252502ru%2560lkc%255Dpctj%252502%273C%252502%272Drwfdlg_urcprep%25250Fni%2560%25250F%2720%25250C%2720suf%2720%25251A%2720hvtrs%273C%25250F%272Durlmafs%252Culgpownfef.lev%25250F412020%272D630%253B97_%2560tf5%252Csuf%273D1524330%253B77%252502%272A%252502taps%2720%25251A%277%2540%252502LeugpownfsCPK_Ru%2560lksjepIF%252502%273C1%272A%252502LeugpownfsCPK_Qald%2560ozIF%252502%273C%25250249fd%253Bef645502%252502%272A%252502LeugpownfsCPK_QeqskolIF%252502%273C%252502%2720%25250C%2720NgwermuldqARI%255DUqepNcmg%252502%273C%252502%2724lv%25251Bfenevef%252506et%273%2540%252502%272A%252502LeugpownfsCPK_WsgrKD%2720%25251A2%25250C%2720ne_wsgrlaoe%2720%25251A%2720%252506nt%273%2540dglgtgd%2724gv%25251B%2720%25255D%272A%252502uiftj%252502%273C820%272A%252502jekgjt%2720%25251A422%25250C%2720iaol%252502%273C%252502jtvpq%25251A%272D%25250Friaol.lgdineq.aoo%25250F412020%272Dfnaqh%255D630%253B97_aapd%252Cwgbr%25251Fd1524330%253B7%253B%252502%272A%252502uapnMnWnqurpmrvefCmnvelt%2720%25251Adansg%25250C%2720eztgrlan%252502%273C%252502%272Drwfdlg_urcprep%25250Fgxvepncl%272Drwfdlg-gxvepncl%252Filpwt%252Cjq%25251F3755%253A336%253B9%2720%25255D','BTD 5')"><img src="https://play-lh.googleusercontent.com/LLEUf9Qcd6N2L4nynBArv7wHyvPLiKBJtXjFEfgD4yS80ZJtQREVjIJE_HXFRDAJxQ"></div>
+      <div class="card" data-name="C.O.D Mobile" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F3020%253A%252F%2560.jtol','C.O.D Mobile')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKiNEpM5ANsuollTpUI3cO5dlQfzJtjxj-pQ&s"></div>
+      <div class="card" data-name="Among Us" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fknlepsnovh%252Flnc-4245%252Fcmmne-ws%252Chvmn','Among Us')"><img src="https://www.webwise.ie/wp-content/uploads/2020/12/IMG1207.jpg"></div>
+      <div class="card" data-name="Cookie Run" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fc%252F3021%253B%252F%2560.jtol','Cookie Run')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVbAqgeV_uwe9KeMG2cQ849H8OTJ30UkNwAWtRHzJtsmJoat1rRfU6_Nk5NKvRRBCvj_fs&s=10"></div>
+      <div class="card" data-name="Geometry Dash" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fpo%2560tmp%252Fgcmgs-1602%252Feemmgtpy%252Fdcsj.jtol','Geometry Dash')"><img src="https://m.media-amazon.com/images/I/61mVIP6Oo1L.png"></div>
+      <div class="card" data-name="Melon Sandbox" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Frlcyfuak%257B%252F51%253B9-mglmn%252Fscnfbmx%252Chvmn','Melon Sandbox')"><img src="https://play-lh.googleusercontent.com/9KgS1cF6vWMF9Fl25S36bKr8zDh0ddkTOeN7WpBcQAE-pKfahG2DjUxbQ8sespNoe3KW3qbcaVD8H6DfNys6"></div>
+      <div class="card" data-name="Terraria" onclick="playGame('Terraria.html','Terraria')"><img src="https://m.media-amazon.com/images/I/31V6N3J7NVL.png"></div>
+      <div class="card" data-name="PubG Mobile" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Frrmxkmc-%2560eva-240%253B%252Fru%2560g%252Fmmbklg-peqiqtcnae%252Chvmn','PubG Mobile')"><img src="https://images.skine.com/brand/card/background/pubg.jpg"></div>
+      <div class="card" data-name="R.E.P.O" onclick="playGame('R.E.P.O.html','R.E.P.O')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/195.png"></div>
+      <div class="card" data-name="Slime Rancher" onclick="playGame('Slime Rancher.html','Slime Rancher')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUW65YDm3GJtJYsKc1zqhy_-A1DjpoO-ka6A&s"></div>
+      <div class="card" data-name="Silk Song" onclick="playGame('Hollow Knight_Silksong.html','Silk Song')"><img src="https://media.wired.com/photos/68b9b74debac84a11c241098/2:3/w_900,h_1350,c_limit/Silksong_Promo_03.jpg"></div>
+      <div class="card" data-name="Deltarune" onclick="playGame('https://ttgworld.net/games/files/Deltarune/index.html','Deltarune')"><img src="https://m.media-amazon.com/images/M/MV5BNzI4YTdiMWQtNzM4Zi00ODk4LWE2YTUtNTkwYjZjYzgyZjJlXkEyXkFqcGc@._V1_.jpg"></div>
+      <div class="card" data-name="Bowmasters" onclick="playGame('Bowmasters.html','Bowmasters')"><img src="https://m.media-amazon.com/images/I/61MdHsjm1xL.png"></div>
+      <div class="card" data-name="Surviver.io" onclick="playGame('Surviver.io.html','Surviver.io')"><img src="https://play-lh.googleusercontent.com/os7JIk6PtULMjal93noyeGqWKjxQ_35sXrT708XxHq_ORk_AIhqW3_iIm8-OjuRLyDDb_MVs5EZAwC4aXIbgtA"></div>
+      <div class="card" data-name="Friday Night Funkin" onclick="playGame('Friday Night Funkin.html','Friday Night Funkin')"><img src="https://fnf-games.io/data/image/game/fnf/fnf.webp"></div>
+      <div class="card" data-name="Block Blast" onclick="playGame('Block Blast.html','Block Blast')"><img src="https://play-lh.googleusercontent.com/R0qgNDYYHbRhw6JFsdEbDMqONplEvJx0m0W9wzYVvY3eNF1c2rfBWYjQxW0sLEzFe1E"></div>
+      <div class="card" data-name="Brotato" onclick="playGame('Brotato.html','Brotato')"><img src="https://static0.thegamerimages.com/wordpress/wp-content/uploads/2023/06/16-brotato-best-builds.jpg"></div>
+      <div class="card" data-name="Bendy Ink Machine" onclick="playGame('Bendy and the Ink Machine.html','Bendy Ink Machine')"><img src="https://play-lh.googleusercontent.com/96eBM7bUrouYRKa_1k3d2inqHMNJp25BX4IeGbpHdhvOYjLjqFn4upD2wEwGPsOBh2oz"></div>
+      <div class="card" data-name="Cuphead" onclick="playGame('Cuphead.html','Cuphead')"><img src="https://cdn.mos.cms.futurecdn.net/i6yoNS8R925bXaxk3F3vAX-1920-80.jpg"></div>
+      <div class="card" data-name="Flying Gorilla 3D" onclick="playGame('Flying Gorilla 3D.html','Flying Gorilla 3D')"><img src="https://i.ytimg.com/vi/NfbQoOWsH4A/maxresdefault.jpg"></div>
+      <div class="card" data-name="Kindergarden" onclick="playGame('Kindergarden.html','Kindergarden')"><img src="https://spacewavesgame.io/data/image/game/kindergarten.png"></div>
+      <div class="card" data-name="Raft" onclick="playGame('Raft.html','Raft')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/457.png"></div>
+      <div class="card" data-name="Slenderman" onclick="playGame('Slender_ The 8 Pages.html','Slenderman')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/451.png"></div>
+      <div class="card" data-name="Stardew Valley" onclick="playGame('Stardew Valley.html','Stardew Valley')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/789.png"></div>
+      <div class="card" data-name="Undertale Yellow" onclick="playGame('Undertale Yellow.html','Undertale Yellow')"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Undertale_Yellow_splash_screen.png"></div>
+      <div class="card" data-name="People Playground" onclick="playGame('People Playground.html','People Playground')"><img src="https://cdn.jsdelivr.net/gh/freebuisness/covers@main/194-m.png"></div>
+      <div class="card" data-name="Untitled Goose Game" onclick="playGame('Untitled Goose Game.html','Untitled Goose Game')"><img src="https://media.sketchfab.com/models/5d26d1d9c0d348df93318d186d019751/thumbnails/1c8f8f1f30f04f6eb6202df6f3bacddb/fd684f94327746779f687c9845c32b39.jpeg"></div>
+      <div class="card" data-name="That's Not My Neighbor" onclick="playGame('That\'s Not My Neighbor.html','That\'s Not My Neighbor')"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3431040/d713591d7029c993a790bfb284f49ca6f1b43b46/capsule_616x353.jpg?t=1763509556"></div>
+      <div class="card" data-name="Amanda The Adventurer" onclick="playGame('Amanda The Adventurer.html','Amanda The Adventurer')"><img src="https://i.ytimg.com/vi/eUcjiPI0TbE/maxresdefault.jpg"></div>
+      <div class="card" data-name="Getting Over It" onclick="playGame('Getting Over It with Bennett Foddy.html','Getting Over It')"><img src="https://sm.ign.com/t/ign_ap/cover/g/getting-ov/getting-over-it-with-bennett-foddy_3bxh.600.jpg"></div>
     </div>
   </div>
 </div>
@@ -415,17 +478,17 @@ body::after {
   <div class="container">
     <div class="section-title">// Apps</div>
     <div class="grid">
-      <div class="card" data-name="TikTok" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fviitmk%252Ccmm-')"><img src="https://sf-static.tiktokcdn.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"></div>
-      <div class="card" data-name="Discord" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Ffiqcmrf.aoo%252F')"><img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg"></div>
-      <div class="card" data-name="Google Proxy" onclick="playGame('https://himrbonker.github.io/Browser1/')"><img src="https://play-lh.googleusercontent.com/Eh-N9HKWJgQ4Oa5wmhaE5RbHkB3m3Ud9tsW6saUHis05BL7Xnpubi5iamR5lDKd-Ew"></div>
-      <div class="card" data-name="Android" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fwnau%2560e-7276%252Flou.jtol')"><img src="https://yt3.googleusercontent.com/_m3RWF-Tx5W5vm25HjkCSxIW4BqGWf0lTs-1o3XpPu4DZaajiFsNYztclB-92EfyZ7yusJkcFw=s900-c-k-c0x00ffffff-no-rj"></div>
-      <div class="card" data-name="YouTube" onclick="playGame('yt.html')"><img src="https://yt3.googleusercontent.com/3s6evpqAiDU9tQR4sC2siJippbH2RWVPnwHgyl4V0th2iuQz0VDQZbUhQBGmsxLYo-mjG6TqZQ=s900-c-k-c0x00ffffff-no-rj"></div>
-      <div class="card" data-name="Movies" onclick="playGame('https://ghoogle.org/go/hvtrs8%2F-bmrgddlkxvv%2Csc.aoo%2F')"><img src="https://media.istockphoto.com/id/1941543588/vector/vintage-cinema-projector-blue-camera-for-recording-movie-and-video-film.jpg?s=612x612&w=0&k=20&c=OA3NdygMeeREB-mNMg04Z1-BF3dx3zZkGHBsV5pEkfg="></div>
-      <div class="card" data-name="Twitch" onclick="playGame('twitch.html')"><img src="https://m.media-amazon.com/images/I/21kRx-CJsUL.png"></div>
-      <div class="card" data-name="Snapchat" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fqncpahct%252Ccmm-srovlkgjt')"><img src="https://play-lh.googleusercontent.com/KxeSAjPTKliCErbivNiXrd6cTwfbqUJcbSRPe_IBVK_YmwckfMRS1VIHz-5cgT09yMo=w240-h480-rw"></div>
-      <div class="card" data-name="GitHub" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Feivhwb%252Ccmm-')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZfLuviePOqQJ1yuhvxr80AsqV91Btr2rqZw&s"></div>
-      <div class="card" data-name="ChatGPT" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-cjavgrt%252Copg-cjav')"><img src="https://diplo-media.s3.eu-central-1.amazonaws.com/2025/03/openai-chatgpt-surge-deepseek.jpg"></div>
-      <div class="card" data-name="Pinterest" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Friltgrgsv.aoo%252F')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWQmKvZzM7NeNuWl3SCSdzWEeBjt9yzUiPlg&s"></div>
+      <div class="card" data-name="TikTok" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fviitmk%252Ccmm-','TikTok')"><img src="https://sf-static.tiktokcdn.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png"></div>
+      <div class="card" data-name="Discord" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Ffiqcmrf.aoo%252F','Discord')"><img src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg"></div>
+      <div class="card" data-name="Google Proxy" onclick="playGame('https://himrbonker.github.io/Browser1/','Google Proxy')"><img src="https://play-lh.googleusercontent.com/Eh-N9HKWJgQ4Oa5wmhaE5RbHkB3m3Ud9tsW6saUHis05BL7Xnpubi5iamR5lDKd-Ew"></div>
+      <div class="card" data-name="Android" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-nmweg%252Cfwn-arpq%252Fwnau%2560e-7276%252Flou.jtol','Android')"><img src="https://yt3.googleusercontent.com/_m3RWF-Tx5W5vm25HjkCSxIW4BqGWf0lTs-1o3XpPu4DZaajiFsNYztclB-92EfyZ7yusJkcFw=s900-c-k-c0x00ffffff-no-rj"></div>
+      <div class="card" data-name="YouTube" onclick="playGame('yt.html','YouTube')"><img src="https://yt3.googleusercontent.com/3s6evpqAiDU9tQR4sC2siJippbH2RWVPnwHgyl4V0th2iuQz0VDQZbUhQBGmsxLYo-mjG6TqZQ=s900-c-k-c0x00ffffff-no-rj"></div>
+      <div class="card" data-name="Movies" onclick="playGame('https://ghoogle.org/go/hvtrs8%2F-bmrgddlkxvv%2Csc.aoo%2F','Movies')"><img src="https://media.istockphoto.com/id/1941543588/vector/vintage-cinema-projector-blue-camera-for-recording-movie-and-video-film.jpg?s=612x612&w=0&k=20&c=OA3NdygMeeREB-mNMg04Z1-BF3dx3zZkGHBsV5pEkfg="></div>
+      <div class="card" data-name="Twitch" onclick="playGame('twitch.html','Twitch')"><img src="https://m.media-amazon.com/images/I/21kRx-CJsUL.png"></div>
+      <div class="card" data-name="Snapchat" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Fqncpahct%252Ccmm-srovlkgjt','Snapchat')"><img src="https://play-lh.googleusercontent.com/KxeSAjPTKliCErbivNiXrd6cTwfbqUJcbSRPe_IBVK_YmwckfMRS1VIHz-5cgT09yMo=w240-h480-rw"></div>
+      <div class="card" data-name="GitHub" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Feivhwb%252Ccmm-','GitHub')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZfLuviePOqQJ1yuhvxr80AsqV91Btr2rqZw&s"></div>
+      <div class="card" data-name="ChatGPT" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtrs8%252F-cjavgrt%252Copg-cjav','ChatGPT')"><img src="https://diplo-media.s3.eu-central-1.amazonaws.com/2025/03/openai-chatgpt-surge-deepseek.jpg"></div>
+      <div class="card" data-name="Pinterest" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Friltgrgsv.aoo%252F','Pinterest')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWQmKvZzM7NeNuWl3SCSdzWEeBjt9yzUiPlg&s"></div>
     </div>
   </div>
 </div>
@@ -435,25 +498,29 @@ body::after {
   <div class="container">
     <div class="section-title">// Websites</div>
     <div class="grid">
-      <div class="card" data-name="Crazy Games" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Farcz%257Bgcmgs%252Ccmm-')"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Crazygames_jpg_logo.jpg"></div>
+      <div class="card" data-name="Crazy Games" onclick="playGame('https://ghoogle.org/s.html?src=%2Fgo%2Fhvtr%253A-%252Farcz%257Bgcmgs%252Ccmm-','Crazy Games')"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Crazygames_jpg_logo.jpg"></div>
     </div>
   </div>
 </div>
 
-<!-- PLAYER -->
-<div class="player" id="player">
-  <div class="playerbar">
-    <button onclick="closeGame()">&#8592; Back</button>
+<!-- MODAL PLAYER -->
+<div id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div id="modalBox">
+    <iframe id="modalIframe" allowfullscreen allow="fullscreen *; autoplay *; clipboard-write *"></iframe>
+    <div class="modal-bar">
+      <div id="modalTitle">// GAME</div>
+      <div class="modal-btns">
+        <button class="modal-btn fullscreen-btn" onclick="goFullscreen()">⛶ Fullscreen</button>
+        <button class="modal-btn close-btn" onclick="closeModal()">✕ Close</button>
+      </div>
+    </div>
   </div>
-  <iframe id="gameFrame" allowfullscreen></iframe>
 </div>
 
 <!-- SETTINGS / BG PANEL -->
 <div id="bgPanel">
   <div class="bg-box">
     <h2>⚙️ Settings</h2>
-
-    <!-- ── BACKGROUND ── -->
     <p style="margin-bottom:2px;">Background Presets</p>
     <div class="preset-grid" id="presetGrid">
       <button class="preset-btn active" onclick="applyPreset(this,'https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyNHJkMDYxczNwOGhpb2ZkajE5NG5xMTNubTRya2JicWJ1ajhkNDh6byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fSRQtBAzrPokPCItuu/giphy.gif',false)">
@@ -484,7 +551,6 @@ body::after {
         <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/061c5ef8-2616-48a4-af21-9f97322673b3/deysvi3-4cc39796-d0db-4a42-997f-758d9198ace4.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8wNjFjNWVmOC0yNjE2LTQ4YTQtYWYyMS05Zjk3MzIyNjczYjMvZGV5c3ZpMy00Y2MzOTc5Ni1kMGRiLTRhNDItOTk3Zi03NThkOTE5OGFjZTQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.5aTaqjat959mIiwb2XQozDeYHsHO-bWG_9bGCCQgUGw"><span>Cyberpunk</span>
       </button>
     </div>
-
     <div class="bg-divider"></div>
     <p>Custom Background</p>
     <label>
@@ -497,11 +563,8 @@ body::after {
       <button class="apply" onclick="applyBgUrl()">Apply URL</button>
       <button class="cancel" onclick="clearBg()">Clear BG</button>
     </div>
-
-    <!-- ── CLOAK SECTION ── -->
     <div class="bg-divider"></div>
     <div class="cloak-section-title">// Tab Cloak</div>
-
     <div class="cloak-toggle-row">
       <span>&#128274; about:blank cloak</span>
       <label class="toggle-switch">
@@ -510,7 +573,6 @@ body::after {
         <div class="toggle-thumb"></div>
       </label>
     </div>
-
     <div class="cloak-options" id="cloakOptions">
       <div class="cloak-label">Tab title shown in browser</div>
       <div class="cloak-presets">
@@ -522,7 +584,6 @@ body::after {
       </div>
       <input type="text" id="cloakTitleInput" placeholder="Custom tab title..." value="Google Classroom">
     </div>
-
     <div class="row">
       <button class="cancel" onclick="closeBgPanel()" style="flex:1">Close</button>
     </div>
@@ -579,27 +640,36 @@ function goHome() {
   document.getElementById('homePage').classList.add('active');
 }
 
-// ── Game launcher ────────────────────────────────────────────────
-function playGame(url) {
+// ── Modal Game Launcher ──────────────────────────────────────────
+function playGame(url, title) {
   if (cloakEnabled) { launchCloaked(url); return; }
-  const loader = document.getElementById('loader');
-  const loaderText = document.getElementById('loaderText');
-  const frame  = document.getElementById('gameFrame');
-  loader.classList.remove('hidden');
-  loaderText.textContent = 'Loading Game';
-  const bar = loader.querySelector('.loader-bar');
-  bar.style.animation='none'; bar.offsetHeight; bar.style.animation='';
-  document.getElementById('player').classList.add('open');
-  frame.src = url;
-  frame.onload = () => { setTimeout(() => { loader.classList.add('hidden'); }, 400); };
-  setTimeout(() => { loader.classList.add('hidden'); }, 5000);
+  document.getElementById('modalIframe').src = url;
+  document.getElementById('modalTitle').textContent = '// ' + (title || 'GAME').toUpperCase();
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-function closeGame() {
-  document.getElementById('player').classList.remove('open');
-  document.getElementById('gameFrame').src = '';
-  document.getElementById('loader').classList.add('hidden');
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('modalIframe').src = '';
+  document.body.style.overflow = '';
 }
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function goFullscreen() {
+  const iframe = document.getElementById('modalIframe');
+  if (iframe.requestFullscreen) iframe.requestFullscreen();
+  else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+  else if (iframe.mozRequestFullScreen) iframe.mozRequestFullScreen();
+}
+
+// close with Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
 
 // ── Background ───────────────────────────────────────────────────
 function applyPreset(btn, url, isVideo) {
@@ -632,28 +702,6 @@ function clearBg() {
 document.getElementById('bgPanel').addEventListener('click', function(e) {
   if (e.target===this) closeBgPanel();
 });
-
-function getCloakIcon() {
-  const title = document.getElementById('cloakTitleInput').value;
-
-  if (title.includes('Google Classroom'))
-    return 'https://ssl.gstatic.com/classroom/favicon.png';
-
-  if (title.includes('Google Docs'))
-    return 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico';
-
-  if (title.includes('Khan Academy'))
-    return 'https://cdn.kastatic.org/images/favicon.ico';
-
-  if (title.includes('Schoology'))
-    return 'https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/favicon.ico';
-
-  if (title.includes('Canvas'))
-    return 'https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico';
-
-  return 'https://www.google.com/favicon.ico'; // default fallback
-}
-  
 </script>
 </body>
 </html>
