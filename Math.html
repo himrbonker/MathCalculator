@@ -312,10 +312,20 @@ body::after {
 }
 #modalOverlay.open { display: flex; }
 
+/* ── MODAL WRAPPER (game + chat side by side) ── */
+#modalWrapper {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  width: min(1180px, 96vw);
+  height: min(580px, 80vh);
+  animation: modalPop 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
 #modalBox {
   position: relative;
-  width: min(860px, 92vw);
-  height: min(580px, 80vh);
+  flex: 1;
+  min-width: 0;
   background: #0d0d0d;
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.12);
@@ -323,7 +333,6 @@ body::after {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: modalPop 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards;
 }
 
 #modalIframe {
@@ -381,6 +390,53 @@ body::after {
   color: #f87171;
 }
 .modal-btn.close-btn:hover { background: #f87171; color: #000; }
+
+.modal-btn.chat-toggle-btn {
+  background: rgba(182,111,255,0.1);
+  border-color: rgba(182,111,255,0.3);
+  color: #b66fff;
+}
+.modal-btn.chat-toggle-btn:hover { background: #b66fff; color: #000; }
+.modal-btn.chat-toggle-btn.active { background: #b66fff; color: #000; }
+
+/* ── CHAT PANEL ── */
+#chatPanel {
+  width: 280px;
+  flex-shrink: 0;
+  background: #0d0d0d;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+}
+#chatPanel.hidden {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  margin: 0;
+}
+
+#chatHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+#chatHeader span {
+  font-family: 'Orbitron', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #b66fff;
+}
+
+
 
 /* ── BG / SETTINGS PANEL ── */
 #bgPanel {
@@ -653,15 +709,34 @@ body::after {
 
 <!-- MODAL PLAYER -->
 <div id="modalOverlay" onclick="handleOverlayClick(event)">
-  <div id="modalBox">
-    <iframe id="modalIframe" allowfullscreen allow="fullscreen *; autoplay *; clipboard-write *"></iframe>
-    <div class="modal-bar">
-      <div id="modalTitle">// GAME</div>
-      <div class="modal-btns">
-        <button class="modal-btn fullscreen-btn" onclick="goFullscreen()">⛶ Fullscreen</button>
-        <button class="modal-btn close-btn" onclick="closeModal()">✕ Close</button>
+  <div id="modalWrapper">
+
+    <!-- GAME BOX -->
+    <div id="modalBox">
+      <iframe id="modalIframe" allowfullscreen allow="fullscreen *; autoplay *; clipboard-write *"></iframe>
+      <div class="modal-bar">
+        <div id="modalTitle">// GAME</div>
+        <div class="modal-btns">
+          <button class="modal-btn chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">💬 Chat</button>
+          <button class="modal-btn fullscreen-btn" onclick="goFullscreen()">⛶ Fullscreen</button>
+          <button class="modal-btn close-btn" onclick="closeModal()">✕ Close</button>
+        </div>
       </div>
     </div>
+
+    <!-- CHAT PANEL -->
+    <div id="chatPanel" class="hidden">
+      <div id="chatHeader">
+        <span>💬 ARCADE CHAT</span>
+      </div>
+      <iframe
+        id="chatIframe"
+        src="https://himrbonker.github.io/cHat/"
+        style="flex:1; border:none; width:100%; border-radius:0 0 22px 22px;"
+        allow="clipboard-write *"
+      ></iframe>
+    </div>
+
   </div>
 </div>
 
@@ -711,7 +786,6 @@ body::after {
       <button class="preset-btn" onclick="applyPreset(this,'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/061c5ef8-2616-48a4-af21-9f97322673b3/deysvi3-4cc39796-d0db-4a42-997f-758d9198ace4.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8wNjFjNWVmOC0yNjE2LTQ4YTQtYWYyMS05Zjk3MzIyNjczYjMvZGV5c3ZpMy00Y2MzOTc5Ni1kMGRiLTRhNDItOTk3Zi03NThkOTE5OGFjZTQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.5aTaqjat959mIiwb2XQozDeYHsHO-bWG_9bGCCQgUGw',false)">
         <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/061c5ef8-2616-48a4-af21-9f97322673b3/deysvi3-4cc39796-d0db-4a42-997f-758d9198ace4.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi8wNjFjNWVmOC0yNjE2LTQ4YTQtYWYyMS05Zjk3MzIyNjczYjMvZGV5c3ZpMy00Y2MzOTc5Ni1kMGRiLTRhNDItOTk3Zi03NThkOTE5OGFjZTQuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.5aTaqjat959mIiwb2XQozDeYHsHO-bWG_9bGCCQgUGw"><span>Cyberpunk</span>
       </button>
-         
     </div>
     <div class="bg-divider"></div>
     <p>Custom Background</p>
@@ -754,46 +828,22 @@ body::after {
 
 <script>
 // ── NEWS SYSTEM ──────────────────────────────────────────────────
-// To push a new update: increment NEWS_VERSION and add a new item to NEWS_CONTENT.
-// All users will see the ! badge again until they open the panel.
-const NEWS_VERSION = 3; // <-- increment this number to trigger the ! for all users
+const NEWS_VERSION = 3;
 const NEWS_CONTENT = [
-  {
-    date: 'April 17, 2026',
-    title: '🎮 Geometry Dash Fixed',
-    body: 'YAY :)'
-  },
-  {
-    date: 'April 17, 2026',
-    title: 'New Link Soon...',
-    body: 'Will notify if happening'
-  },
-  {
-    date: 'April 17, 2026',
-    title: 'Added A BUNCH of Games',
-    body: 'Half Life, GTA, and Skribbl.io'
-  },
-  {
-    date: 'April 20, 2026',
-    title: 'Added A Chat of Games',
-    body: 'Lo-Key Chat'
-  },
-  
+  { date: 'April 17, 2026', title: '🎮 Geometry Dash Fixed', body: 'YAY :)' },
+  { date: 'April 17, 2026', title: 'New Link Soon...', body: 'Will notify if happening' },
+  { date: 'April 17, 2026', title: 'Added A BUNCH of Games', body: 'Half Life, GTA, and Skribbl.io' },
+  { date: 'April 20, 2026', title: 'Added A Chat of Games', body: 'Lo-Key Chat' },
 ];
-
 const NEWS_KEY = 'arcade_news_seen_v';
 
 function initNews() {
   const seenVersion = parseInt(localStorage.getItem(NEWS_KEY) || '0', 10);
   const badge = document.getElementById('newsBadge');
-  if (seenVersion < NEWS_VERSION) {
-    badge.classList.add('visible');
-  } else {
-    badge.classList.remove('visible');
-  }
+  if (seenVersion < NEWS_VERSION) badge.classList.add('visible');
+  else badge.classList.remove('visible');
   renderNews();
 }
-
 function renderNews() {
   const container = document.getElementById('newsContent');
   container.innerHTML = NEWS_CONTENT.map(item => `
@@ -804,21 +854,13 @@ function renderNews() {
     </div>
   `).join('');
 }
-
 function openNewsPanel() {
   document.getElementById('newsPanel').classList.add('open');
-  // Mark as seen — store current version
   localStorage.setItem(NEWS_KEY, String(NEWS_VERSION));
   document.getElementById('newsBadge').classList.remove('visible');
 }
-
-function closeNewsPanel() {
-  document.getElementById('newsPanel').classList.remove('open');
-}
-
-function handleNewsPanelClick(e) {
-  if (e.target === document.getElementById('newsPanel')) closeNewsPanel();
-}
+function closeNewsPanel() { document.getElementById('newsPanel').classList.remove('open'); }
+function handleNewsPanelClick(e) { if (e.target === document.getElementById('newsPanel')) closeNewsPanel(); }
 
 // ── Loading ──────────────────────────────────────────────────────
 const phases = ['Booting systems','Loading assets','Connecting arcade','Almost ready'];
@@ -833,14 +875,13 @@ setTimeout(() => { document.getElementById('loader').classList.add('hidden'); },
 
 // ── Cloak state ──────────────────────────────────────────────────
 let cloakEnabled = false;
-let cloakTitle   = 'Google Classroom';
+let cloakTitle = 'Google Classroom';
 
 function onCloakToggle(cb) {
   cloakEnabled = cb.checked;
   document.getElementById('cloakOptions').classList.toggle('visible', cb.checked);
   document.getElementById('bgBtn').classList.toggle('cloaked', cb.checked);
 }
-
 function selectTabPreset(btn, title) {
   document.querySelectorAll('.tab-preset').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -869,6 +910,22 @@ function goHome() {
   document.getElementById('homePage').classList.add('active');
 }
 
+// ── Chat Toggle ──────────────────────────────────────────────────
+let chatOpen = false;
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const panel = document.getElementById('chatPanel');
+  const btn = document.getElementById('chatToggleBtn');
+  if (chatOpen) {
+    panel.classList.remove('hidden');
+    btn.classList.add('active');
+  } else {
+    panel.classList.add('hidden');
+    btn.classList.remove('active');
+  }
+}
+
 // ── Modal Game Launcher ──────────────────────────────────────────
 function playGame(url, title) {
   if (cloakEnabled) { launchCloaked(url); return; }
@@ -876,24 +933,29 @@ function playGame(url, title) {
   document.getElementById('modalTitle').textContent = '// ' + (title || 'GAME').toUpperCase();
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  chatOpen = false;
+  document.getElementById('chatPanel').classList.add('hidden');
+  document.getElementById('chatToggleBtn').classList.remove('active');
 }
-
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
   document.getElementById('modalIframe').src = '';
   document.body.style.overflow = '';
+  chatOpen = false;
+  document.getElementById('chatPanel').classList.add('hidden');
+  document.getElementById('chatToggleBtn').classList.remove('active');
 }
-
 function handleOverlayClick(e) {
   if (e.target === document.getElementById('modalOverlay')) closeModal();
 }
-
 function goFullscreen() {
   const iframe = document.getElementById('modalIframe');
   if (iframe.requestFullscreen) iframe.requestFullscreen();
   else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
   else if (iframe.mozRequestFullScreen) iframe.mozRequestFullScreen();
 }
+
+
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeModal(); closeNewsPanel(); }
